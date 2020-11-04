@@ -1,8 +1,8 @@
 #! /bin/bash
 
 mojaT=77
-tr_now=3 # zadnji trening
-ci_now=0 # zadnji ciklus
+tr_now=4 # zadnji trening
+ci_now=1 # zadnji ciklus
 procenti=( 105 100 97 94 92 89 86 83 81 78 75 73 71 70 )
 trening=( Bench Zgib Deadlift Press Squat )
 ciklus=( neural metabolic )
@@ -12,9 +12,8 @@ metabolic='12 10'
 Bench=74.09 # 1RM
 Zgib=23.89 #
 Press=60.69 # 
-Squat=83.43 #
+Squat=85.24 #
 Deadlift=112.66 # 
-Crunch=6.08 # 
 
 #: USAGE: is_num argument
 is_num() {
@@ -98,6 +97,7 @@ ispisi_trening() {
     fi
 }
 
+#: USAGE odredi_trening
 odredi_trening() {
     tr_now=$(($tr_now+1))
     if [[ $tr_now -gt $((${#trening[@]}-1)) ]]; then
@@ -109,13 +109,8 @@ odredi_trening() {
     fi
 }
 
-ciklus() {
-    odredi_trening
-    ispisi_trening "${!ciklus[$ci_now]}" 
-}
-
 clear -x
-ciklus
-
+odredi_trening
+ispisi_trening "${!ciklus[$ci_now]}" 
 update ci_now 
 update tr_now
