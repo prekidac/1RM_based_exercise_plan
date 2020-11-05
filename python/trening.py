@@ -2,15 +2,14 @@
 
 # Linux CLI workout assistant 
 
-import os
 from pathlib import Path
-import json
-
+import os, json
 
 class Trening(object):
 
     def __init__(self, config_path) -> None:
         self.config_path = config_path
+        self.clear_terminal = lambda : os.system("clear")
         self.load_conf()
         self.print_exercise()
         self.update_config()
@@ -46,15 +45,33 @@ class Trening(object):
                 weight = weight // self.config["weight_inc"] * self.config["weight_inc"]
             self.weights.append(weight)
 
-
     def print_exercise(self) -> None:
         self.determine_exercise()
         self.calculate_set_weights()
-        # print exercise
+        self.clear_terminal()
+        for w in self.weights[0:-1]:
+            if self.current_cycle == 'neural':
+                print(f"{w:20}  x {self.cycle_rms[-1]}")
+            else:
+                reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
+                print(f"{w:20}  x {reps}")
+        
+        if self.current_cycle == 'neural':
+            print(f"\n{self.current_exercise:>10}{self.weights[-1]:>10}  x max")
+        else:
+            reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
+            print(f"\n{self.current_exercise:>10}{self.weights[-1]:>10}  x {reps}")
+    
+    def calculate_new_one_rm(self) -> None:
         pass
 
     def update_config(self) -> None:
-        pass
+        self.calculate_new_one_rm()
+        self.config["last_exercise"] = self.current_exercise
+        self.config["last_cycle"] = self.current_cycle
+        #self.config["exercises"][self.current_exercise]["1RM"] = self.new_one_rm
+        with open(self.config_path, "w") as f:
+            json.dump(self.config, f, indent=4)
 
 
 if __name__ == "__main__":
