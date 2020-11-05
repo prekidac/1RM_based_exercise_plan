@@ -109,6 +109,7 @@ odredi_trening() {
     fi
 }
 
+
 clear -x
 odredi_trening
 ispisi_trening "${!ciklus[$ci_now]}" 
