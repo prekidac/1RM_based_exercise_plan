@@ -51,16 +51,21 @@ class Trening(object):
         self.clear_terminal()
         for w in self.weights[0:-1]:
             if self.current_cycle == 'neural':
-                print(f"{w:20}  x {self.cycle_rms[-1]}")
+                print(f"\t\t{w}\tx {self.cycle_rms[-1]}")
             else:
                 reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-                print(f"{w:20}  x {reps}")
+                print(f"\t\t{w}\tx {reps}")
         
+        red_bold = "\033[31m" + "\033[01m"
+        green_bold = "\033[32m" + "\033[01m"
+        end = "\033[0m"
         if self.current_cycle == 'neural':
-            print(f"\n{self.current_exercise:>10}{self.weights[-1]:>10}  x max")
+            exercise = red_bold + self.current_exercise.title() + ":" + end
+            print(f"\n  {exercise:<10}\t{self.weights[-1]}\tx max")
         else:
+            exercise = green_bold + self.current_exercise.title() + ":" + end
             reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-            print(f"\n{self.current_exercise:>10}{self.weights[-1]:>10}  x {reps}")
+            print(f"\n  {exercise:<10}\t{self.weights[-1]}\tx {reps}")
     
     def calculate_new_one_rm(self) -> None:
         pass
