@@ -3,19 +3,21 @@
 # Linux CLI workout assistant 
 
 from pathlib import Path
-import os, json
+import os, json, sys
+
+config_file = "trening.config.json"
 
 class Trening(object):
 
-    def __init__(self, config_path) -> None:
-        self.config_path = config_path
+    def __init__(self) -> None:
         self.clear_terminal = lambda : os.system("clear")
         self.load_conf()
         self.print_exercise()
         self.update_config()
 
     def load_conf(self) -> None:
-        with open(config_path) as f:
+        self.config_path = os.path.join(os.path.dirname(sys.argv[0]), config_file)
+        with open(self.config_path) as f:
             self.config = json.load(f)
 
     def determine_exercise(self) -> None:
@@ -51,38 +53,43 @@ class Trening(object):
         self.clear_terminal()
         for w in self.weights[0:-1]:
             if self.current_cycle == 'neural':
-                print(f"\t\t{w}\tx {self.cycle_rms[-1]}")
+                print(f"\t\t{w:>5}\tx {self.cycle_rms[-1]}")
             else:
                 reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-                print(f"\t\t{w}\tx {reps}")
+                print(f"\t\t{w:>5}\tx {reps}")
         
         red_bold = "\033[31m" + "\033[01m"
         green_bold = "\033[32m" + "\033[01m"
         end = "\033[0m"
         if self.current_cycle == 'neural':
             exercise = red_bold + self.current_exercise.title() + ":" + end
-            print(f"\n  {exercise:<10}\t{self.weights[-1]}\tx max")
+            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx max")
         else:
             exercise = green_bold + self.current_exercise.title() + ":" + end
             reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-            print(f"\n  {exercise:<10}\t{self.weights[-1]}\tx {reps}")
+            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx {reps}")
     
     def calculate_new_one_rm(self) -> None:
-        pass
+        if self.current_cycle == "neural":
+            while True:
+                reps = input("\n  Puta podigao: ")
+                if reps.isdigit() and 0 < int(reps) < 10: break
+            self.new_one_rm = self.config["exercises"][self.current_exercise]["1RM"] * self.config["percents"][self.cycle_rms[-1]] / self.config["percents"][int(reps)]
+            self.new_one_rm = round(self.new_one_rm, 2)
+        else:
+            input()
 
     def update_config(self) -> None:
         self.calculate_new_one_rm()
         self.config["last_exercise"] = self.current_exercise
         self.config["last_cycle"] = self.current_cycle
-        #self.config["exercises"][self.current_exercise]["1RM"] = self.new_one_rm
+        try:
+            self.config["exercises"][self.current_exercise]["1RM"] = self.new_one_rm
+        except:
+            pass
         with open(self.config_path, "w") as f:
             json.dump(self.config, f, indent=4)
 
 
 if __name__ == "__main__":
-    if os.name == "posix":
-        config_file = ".config/trening.config.json"
-    else:
-        raise OSError("Linux only")
-    config_path = os.path.join(Path.home(), config_file)
-    trening = Trening(config_path)
+    trening = Trening()
