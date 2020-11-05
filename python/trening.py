@@ -1,8 +1,10 @@
 #! /usr/bin/python3
-import sys, os
+import os
+from pathlib import Path
 import json
 
-config_file = "trening.config.json"
+if os.name == "posix":
+    config_file = ".config/trening.config.json"
 
 class Trening(object):
     """
@@ -12,9 +14,10 @@ class Trening(object):
         self.load_conf()
 
     def load_conf(self) -> None:
-        with open(os.path.join(os.path.dirname(sys.argv[0]), config_file)) as f:
+        with open(os.path.join(Path.home(), config_file)) as f:
             self.config = json.load(f)
-        
+        for i in self.config:
+            print(i)
     def determine_exercise(self) -> None:
         pass
 
