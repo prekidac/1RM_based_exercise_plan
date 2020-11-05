@@ -1,0 +1,33 @@
+{
+    "my_weight": 77,
+    "weight_inc": 2.5,
+    "last_exercise": "bench",
+    "last_cycle": "neural",
+    "percent": [1.05, 1.00, 0.97, 0.94, 0.92, 0.89, 0.86, 0.83, 0.81, 0.78, 0.75, 0.73, 0.71, 0.70],
+    "exercise_order": ["bench", "chin-up", "deadlift", "press", "squat"],
+    "cycle_order": ["neural", "metabolic"],
+    "neural": [12, 9, 6, 3],
+    "metabolic": [12, 10],
+    "exercises": {
+        "bench": {
+            "1RM": 75,
+            "max": null
+        },
+        "chin-up": {
+            "1RM": 24,
+            "max": null
+        },
+        "press": {
+            "1RM": 61,
+            "max": null
+        },
+        "squat": {
+            "1RM": 85,
+            "max": null
+        },
+        "deadlift": {
+            "1RM": 113,
+            "max": null
+        }
+    }
+}

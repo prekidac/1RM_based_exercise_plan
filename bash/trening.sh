@@ -2,7 +2,7 @@
 
 mojaT=77
 tr_now=4 # zadnji trening
-ci_now=1 # zadnji ciklus
+ci_now=0 # zadnji ciklus
 procenti=( 105 100 97 94 92 89 86 83 81 78 75 73 71 70 )
 trening=( Bench Zgib Deadlift Press Squat )
 ciklus=( neural metabolic )
@@ -34,7 +34,7 @@ tezina_update() {
     while true; do
         read -p "  Puta podigao: " 
         if is_num "${REPLY}"; then
-            if [[ ${trening[$tr_now]} == Zgib ]]; then
+            if [[ ${trening[$tr_now]} == "Zgib" ]]; then
                 eval "${trening[$tr_now]}"="$(echo "scale=2; (${!trening[$tr_now]}+$mojaT)*${procenti[$1]}/${procenti[$REPLY]}-$mojaT" | bc -l)"
             else
                 eval "${trening[$tr_now]}"="$(echo "scale=2; ${!trening[$tr_now]}*${procenti[$1]}/${procenti[$REPLY]}" | bc -l)"
