@@ -69,22 +69,29 @@ class Trening(object):
             reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
             print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx {reps}")
     
-    def calculate_new_one_rm(self) -> None:
+    def calculate_new_1rm(self) -> None:
         if self.current_cycle == "neural":
             while True:
                 reps = input("\n  Puta podigao: ")
-                if reps.isdigit() and 0 < int(reps) < 10: break
-            self.new_one_rm = self.config["exercises"][self.current_exercise]["1RM"] * self.config["percents"][self.cycle_rms[-1]] / self.config["percents"][int(reps)]
-            self.new_one_rm = round(self.new_one_rm, 2)
+                if reps.isdigit() and 0 <= int(reps) < 10: break
+            if self.current_exercise == "chin-up":
+                weight = (self.config["exercises"]["chin-up"]["1RM"] + self.config["my_weight"])
+                ratio = self.config["percents"][self.cycle_rms[-1]] / self.config["percents"][int(reps)]
+                self.new_1rm = weight * ratio - self.config["my_weight"]
+            else:
+                weight = self.config["exercises"][self.current_exercise]["1RM"]
+                ratio = self.config["percents"][self.cycle_rms[-1]] / self.config["percents"][int(reps)]
+                self.new_1rm = weight * ratio
+            self.new_1rm = round(self.new_1rm, 2)
         else:
-            input()
+            input("\n")
 
     def update_config(self) -> None:
-        self.calculate_new_one_rm()
+        self.calculate_new_1rm()
         self.config["last_exercise"] = self.current_exercise
         self.config["last_cycle"] = self.current_cycle
         try:
-            self.config["exercises"][self.current_exercise]["1RM"] = self.new_one_rm
+            self.config["exercises"][self.current_exercise]["1RM"] = self.new_1rm
         except:
             pass
         with open(self.config_path, "w") as f:

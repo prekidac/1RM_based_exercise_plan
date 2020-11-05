@@ -1,8 +1,8 @@
 {
     "my_weight": 77,
     "weight_inc": 2.5,
-    "last_exercise": "squat",
-    "last_cycle": "neural",
+    "last_exercise": "bench",
+    "last_cycle": "metabolic",
     "percents": [
         1.05,
         1.0,
@@ -47,19 +47,19 @@
             "max": null
         },
         "chin-up": {
-            "1RM": 24,
+            "1RM": 26.2,
             "max": null
         },
         "press": {
-            "1RM": 61,
+            "1RM": 65.4,
             "max": null
         },
         "squat": {
-            "1RM": 85,
+            "1RM": 81.73,
             "max": null
         },
         "deadlift": {
-            "1RM": 113,
+            "1RM": 116.18,
             "max": null
         }
     }
