@@ -74,6 +74,7 @@ class Trening(object):
             while True:
                 reps = input("\n  Puta podigao: ")
                 if reps.isdigit() and 0 <= int(reps) < 10: break
+
             if self.current_exercise == "chin-up":
                 weight = (self.config["exercises"]["chin-up"]["1RM"] + self.config["my_weight"])
                 ratio = self.config["percents"][self.cycle_rms[-1]] / self.config["percents"][int(reps)]
@@ -83,8 +84,15 @@ class Trening(object):
                 ratio = self.config["percents"][self.cycle_rms[-1]] / self.config["percents"][int(reps)]
                 self.new_1rm = weight * ratio
             self.new_1rm = round(self.new_1rm, 2)
+
+            maximum = self.has_max()
+            if maximum and self.new_1rm > maximum :
+                self.new_1rm = maximum
         else:
             input("\n")
+        
+    def has_max(self) -> bool:
+        return self.config["exercises"][self.current_exercise]["max"]
 
     def update_config(self) -> None:
         self.calculate_new_1rm()
