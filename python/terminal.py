@@ -16,20 +16,28 @@ END = "\033[0m"
 
 class Color(object):
 
+    @property
+    def text(self):
+        return self._text
+    
+    @text.setter
+    def text(self, text: any) -> None:
+        self._text = str(text)
+
     def RED_BOLD(self)-> str:
-        return RED_BOLD + self.string + END
+        return RED_BOLD + self.text + END
 
     def GREEN_BOLD(self)-> str:
-        return GREEN_BOLD + self.string + END
+        return GREEN_BOLD + self.text + END
 
     def WARNING(self)-> str:
-        return WARNING + self.string + END
+        return WARNING + self.text + END
 
     def OKBLUE(self)-> str:
-        return OKBLUE + self.string + END
+        return OKBLUE + self.text + END
 
     def OKCYAN(self)-> str:
-        return OKCYAN + self.string + END
+        return OKCYAN + self.text + END
 
 class Terminal(object):
 
@@ -78,5 +86,5 @@ class Terminal(object):
                 os.kill(pid, 9)
 
     def paint(self, text: any) -> Color:
-        self.color.string = str(text)
+        self.color.text = text
         return self.color
