@@ -13,8 +13,6 @@ class Trening(object):
     def __init__(self) -> None:
         self.terminal = Terminal()
         self.load_conf()
-        self.print_exercise()
-        self.update_config()
 
     def load_conf(self) -> None:
         self.config_path = os.path.join(os.path.dirname(sys.argv[0]), config_file)
@@ -35,6 +33,7 @@ class Trening(object):
             self.current_exercise = self.config["exercise_order"][0]
         self.cycle_rms = self.config[self.current_cycle + "_RMs"]
         self.one_rm = self.config["exercises"][self.current_exercise]["1RM"]
+        self.calculate_set_weights()
 
     def calculate_set_weights(self) -> None:
         self.weights = []
@@ -50,7 +49,6 @@ class Trening(object):
 
     def print_exercise(self) -> None:
         self.determine_exercise()
-        self.calculate_set_weights()
         self.terminal.clear()
 
         for w in self.weights[0:-1]:
@@ -83,16 +81,12 @@ class Trening(object):
                 ratio = self.config["percents"][self.cycle_rms[-1]] / self.config["percents"][int(reps)]
                 self.new_1rm = weight * ratio
             self.new_1rm = round(self.new_1rm, 2)
-
-            maximum = self.has_max()
-            if maximum and self.new_1rm > maximum :
-                self.new_1rm = maximum
+            self.maximum = self.config["exercises"][self.current_exercise]["max"]
+            if self.maximum and self.new_1rm > self.maximum :
+                self.new_1rm = self.maximum
         else:
             input("\n")
         
-    def has_max(self) -> bool:
-        return self.config["exercises"][self.current_exercise]["max"]
-
     def update_config(self) -> None:
         self.calculate_new_1rm()
         self.config["last_exercise"] = self.current_exercise
@@ -107,3 +101,5 @@ class Trening(object):
 
 if __name__ == "__main__":
     trening = Trening()
+    trening.print_exercise()
+    trening.update_config()
