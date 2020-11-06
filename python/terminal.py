@@ -17,7 +17,7 @@ END = "\033[0m"
 class Color(object):
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self._text
     
     @text.setter
