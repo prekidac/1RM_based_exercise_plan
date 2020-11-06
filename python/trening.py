@@ -4,13 +4,14 @@
 
 from pathlib import Path
 import os, json, sys
+from terminal import Terminal
 
 config_file = "trening.config.json"
 
 class Trening(object):
 
     def __init__(self) -> None:
-        self.clear_terminal = lambda : os.system("clear")
+        self.terminal = Terminal()
         self.load_conf()
         self.print_exercise()
         self.update_config()
@@ -50,22 +51,20 @@ class Trening(object):
     def print_exercise(self) -> None:
         self.determine_exercise()
         self.calculate_set_weights()
-        self.clear_terminal()
+        self.terminal.clear()
+
         for w in self.weights[0:-1]:
             if self.current_cycle == 'neural':
                 print(f"\t\t{w:>5}\tx {self.cycle_rms[-1]}")
             else:
                 reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
                 print(f"\t\t{w:>5}\tx {reps}")
-        
-        red_bold = "\033[31m" + "\033[01m"
-        green_bold = "\033[32m" + "\033[01m"
-        end = "\033[0m"
+
         if self.current_cycle == 'neural':
-            exercise = red_bold + self.current_exercise.title() + ":" + end
+            exercise = self.terminal.paint(self.current_exercise.title() + ":").RED_BOLD()
             print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx max")
         else:
-            exercise = green_bold + self.current_exercise.title() + ":" + end
+            exercise = self.terminal.paint(self.current_exercise.title() + ":").GREEN_BOLD()
             reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
             print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx {reps}")
     
