@@ -6,7 +6,7 @@ from pathlib import Path
 import os, json, sys
 from terminal import Terminal
 
-config_file = "trening.config.json"
+config_file = "trening.json"
 
 class Trening(object):
 
