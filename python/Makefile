@@ -9,4 +9,4 @@ install:
 	@cp trening.py ~/.local/bin/trening
 	@cp terminal.py ~/.local/lib/
 	@(test -f ~/.local/share/trening.json) || \
-	cp trening.json ~/.local/bin/ && echo "Have user data"
+	cp trening.json ~/.local/share/ && echo "Have user data"
