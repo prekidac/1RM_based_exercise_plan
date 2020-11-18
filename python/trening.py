@@ -2,20 +2,20 @@
 
 # Linux CLI workout assistant 
 
-from pathlib import Path
 import os, json, sys
+sys.path.append("/home/slavujko/.local/lib")
 from terminal import Terminal
 
-config_file = "trening.json"
+config_path = "/home/slavujko/.local/share/trening.json"
 
 class Trening(object):
 
     def __init__(self) -> None:
+        self.config_path = config_path
         self.terminal = Terminal()
         self.load_conf()
 
     def load_conf(self) -> None:
-        self.config_path = os.path.join(os.path.dirname(sys.argv[0]), config_file)
         with open(self.config_path) as f:
             self.config = json.load(f)
 
