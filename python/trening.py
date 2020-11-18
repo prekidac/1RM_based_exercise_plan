@@ -2,8 +2,13 @@
 
 # Linux CLI workout assistant 
 
-import os, json, sys
-sys.path.append("/home/slavujko/.local/lib")
+import platform, json, sys
+sys.dont_write_bytecode = True
+if platform.system() == "Linux":
+    sys.path.append("/home/slavujko/.local/lib")
+else:
+    exit("Linux only")
+
 from terminal import Terminal
 
 config_path = "/home/slavujko/.local/share/trening.json"

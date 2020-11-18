@@ -48,7 +48,7 @@ class Terminal(object):
         """
         Check if blocking app is running
         """
-        if os.name != "nt":
+        if os.name == "posix":
             target = "xtrlock"
         else:
             target = ""
@@ -58,16 +58,16 @@ class Terminal(object):
         """
         Clear screen
         """
-        if os.name == "nt":
-            os.system("cls")
-        else:
+        if os.name == "posix":
             os.system("clear")
+        else:
+            os.system("cls")
 
     def block(self) -> None:
         """
         Blocking keyboard and mouse 
         """
-        if os.name != "nt":
+        if os.name == "posix":
             os.system("xtrlock &")
     
     def unblock(self) -> None:
