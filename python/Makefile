@@ -6,6 +6,7 @@ all:
 	@echo
 
 install:
+	@chmod +x trening.py
 	@cp trening.py ~/.local/bin/trening
 	@cp terminal.py ~/.local/lib/
 	@(test -f ~/.local/share/trening.json) || \
