@@ -9,4 +9,4 @@ install:
 	@cp trening.py ~/.local/bin/trening
 	@cp terminal.py ~/.local/lib/
 	@if [ -f ~/.local/share/trening.json ]; then echo "Have user data"; \
-		else echo "User data created"; cp trening.json ~/.local/share/; fi
+		else cp trening.json ~/.local/share/ && echo "User data created";  fi
