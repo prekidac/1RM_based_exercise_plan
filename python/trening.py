@@ -64,13 +64,12 @@ class Trening(object):
                 reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
                 print(f"\t\t{w:>5}\tx {reps}")
 
+        exercise = self.terminal.paint(self.current_exercise.title() + ":")
         if self.current_cycle == 'neural':
-            exercise = self.terminal.paint(self.current_exercise.title() + ":").RED_BOLD()
-            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx max")
+            print(f"\n  {exercise.RED_BOLD():<10}\t{self.weights[-1]:>5}\tx max")
         else:
-            exercise = self.terminal.paint(self.current_exercise.title() + ":").GREEN_BOLD()
             reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx {reps}")
+            print(f"\n  {exercise.GREEN_BOLD():<10}\t{self.weights[-1]:>5}\tx {reps}")
     
     def calculate_new_1rm(self) -> None:
         if self.current_cycle == "neural":
