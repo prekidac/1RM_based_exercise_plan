@@ -15,9 +15,12 @@ GREEN_BOLD = "\033[32m" + "\033[01m"
 END = "\033[0m"
 
 class Color(object):
+    """
+    Painted string representation of an object
+    """
 
-    def __init__(self, text: any) -> None:
-        self._text = str(text)
+    def __init__(self, obj: any) -> None:
+        self._text = str(obj)
 
     def HEADER(self) -> str:
         return HEADER + self._text + END
@@ -89,8 +92,8 @@ class Terminal(object):
                 pid = int(line.split(None, 1)[0])
                 os.kill(pid, 9)
 
-    def paint(self, text: any) -> Color:
+    def paint(self, obj: any) -> Color:
         """
-        Returns Color object with text set
+        Returns Color object - painted string representation of an object
         """
-        return self.color(text)
+        return self.color(obj)
