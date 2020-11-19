@@ -16,13 +16,8 @@ END = "\033[0m"
 
 class Color(object):
 
-    @property
-    def text(self) -> str:
-        return self._text
-    
-    @text.setter
-    def text(self, text: any) -> None:
-        self._text = str(text)
+    def __init__(self, text: any) -> None:
+        self.text = str(text)
 
     def HEADER(self) -> str:
         return HEADER + self.text + END
@@ -51,7 +46,7 @@ class Color(object):
 class Terminal(object):
 
     def __init__(self):
-        self.color = Color()
+        self.color = Color
 
     def isblock(self) -> bool:
         """
@@ -95,5 +90,7 @@ class Terminal(object):
                 os.kill(pid, 9)
 
     def paint(self, text: any) -> Color:
-        self.color.text = text
-        return self.color
+        """
+        Returns Color object with text set
+        """
+        return self.color(text)
