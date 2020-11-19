@@ -4,6 +4,7 @@
 
 import platform, json, sys, os
 from pathlib import Path
+from colored import fg, attr
 sys.dont_write_bytecode = True
 if platform.system() == "Linux":
     lib_path = ".local/lib" 
@@ -11,14 +12,11 @@ if platform.system() == "Linux":
     data_path = os.path.join(Path.home(), ".local/share/trening.json")
 else:
     exit("Linux only")
-from terminal import Terminal
-
 
 class Trening(object):
 
     def __init__(self) -> None:
         self.data_path = data_path
-        self.terminal = Terminal()
         self.load_conf()
 
     def load_conf(self) -> None:
@@ -55,7 +53,7 @@ class Trening(object):
 
     def print_exercise(self) -> None:
         self.determine_exercise()
-        self.terminal.clear()
+        os.system("clear")
 
         for w in self.weights[0:-1]:
             if self.current_cycle == 'neural':
@@ -64,12 +62,13 @@ class Trening(object):
                 reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
                 print(f"\t\t{w:>5}\tx {reps}")
 
-        exercise = self.terminal.paint(self.current_exercise.title() + ":")
         if self.current_cycle == 'neural':
-            print(f"\n  {exercise.RED_BOLD():<10}\t{self.weights[-1]:>5}\tx max")
+            exercise = fg(1) + attr(1) + self.current_exercise.title() + ":" + attr("reset")
+            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx max")
         else:
+            exercise = fg(2) + attr(1) + self.current_exercise.title() + ":" + attr("reset")
             reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-            print(f"\n  {exercise.GREEN_BOLD():<10}\t{self.weights[-1]:>5}\tx {reps}")
+            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx {reps}")
     
     def calculate_new_1rm(self) -> None:
         if self.current_cycle == "neural":
