@@ -17,31 +17,31 @@ END = "\033[0m"
 class Color(object):
 
     def __init__(self, text: any) -> None:
-        self.text = str(text)
+        self._text = str(text)
 
     def HEADER(self) -> str:
-        return HEADER + self.text + END
+        return HEADER + self._text + END
 
     def UNDERLINE(self) -> str:
-        return UNDERLINE + self.text + END
+        return UNDERLINE + self._text + END
 
     def FAIL(self) -> str:
-        return FAIL + self.text + END
+        return FAIL + self._text + END
 
     def RED_BOLD(self)-> str:
-        return RED_BOLD + self.text + END
+        return RED_BOLD + self._text + END
 
     def GREEN_BOLD(self)-> str:
-        return GREEN_BOLD + self.text + END
+        return GREEN_BOLD + self._text + END
 
     def WARNING(self)-> str:
-        return WARNING + self.text + END
+        return WARNING + self._text + END
 
     def OKBLUE(self)-> str:
-        return OKBLUE + self.text + END
+        return OKBLUE + self._text + END
 
     def OKCYAN(self)-> str:
-        return OKCYAN + self.text + END
+        return OKCYAN + self._text + END
 
 class Terminal(object):
 
