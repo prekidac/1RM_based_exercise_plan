@@ -2,26 +2,27 @@
 
 # Linux CLI workout assistant 
 
-import platform, json, sys
+import platform, json, sys, os
+from pathlib import Path
 sys.dont_write_bytecode = True
 if platform.system() == "Linux":
-    sys.path.append("/home/slavujko/.local/lib")
+    lib_path = ".local/lib" 
+    sys.path.append(os.path.join(Path.home(), lib_path))
+    data_path = os.path.join(Path.home(), ".local/share/trening.json")
 else:
     exit("Linux only")
-
 from terminal import Terminal
 
-config_path = "/home/slavujko/.local/share/trening.json"
 
 class Trening(object):
 
     def __init__(self) -> None:
-        self.config_path = config_path
+        self.data_path = data_path
         self.terminal = Terminal()
         self.load_conf()
 
     def load_conf(self) -> None:
-        with open(self.config_path) as f:
+        with open(self.data_path) as f:
             self.config = json.load(f)
 
     def determine_exercise(self) -> None:
@@ -100,7 +101,7 @@ class Trening(object):
             self.config["exercises"][self.current_exercise]["1RM"] = self.new_1rm
         except:
             pass
-        with open(self.config_path, "w") as f:
+        with open(self.data_path, "w") as f:
             json.dump(self.config, f, indent=4)
 
 
