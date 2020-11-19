@@ -2,16 +2,11 @@
 
 # Linux CLI workout assistant 
 
-import platform, json, sys, os
+import json, os
 from pathlib import Path
 from colored import fg, attr
-sys.dont_write_bytecode = True
-if platform.system() == "Linux":
-    lib_path = ".local/lib" 
-    sys.path.append(os.path.join(Path.home(), lib_path))
-    data_path = os.path.join(Path.home(), ".local/share/trening.json")
-else:
-    exit("Linux only")
+ 
+data_path = os.path.join(Path.home(), ".local/share/trening.json")
 
 class Trening(object):
 
