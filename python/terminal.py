@@ -24,6 +24,15 @@ class Color(object):
     def text(self, text: any) -> None:
         self._text = str(text)
 
+    def HEADER(self) -> str:
+        return HEADER + self.text + END
+
+    def UNDERLINE(self) -> str:
+        return UNDERLINE + self.text + END
+
+    def FAIL(self) -> str:
+        return FAIL + self.text + END
+
     def RED_BOLD(self)-> str:
         return RED_BOLD + self.text + END
 
