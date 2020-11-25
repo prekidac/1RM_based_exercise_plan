@@ -4,9 +4,14 @@ which calculates weight for every set based on 1RM.
 ## Exercises
 Bench, Squat, Deadlift, Shoulder press and Chin-up.
 ## Methodology
-There are two types of exercises based on neuro-muscular continuum,
-i.e. low and high number of reps per set. 
+There are two types of exercises based on neuro-muscular continuum:  
+high and low weight reps.  
+This program uses 3 and 10 RM weights.
+> 2RM = 97% 1RM  
+3RM = 94% 1RM  
+4RM = 92% 1RM  
+...
+
 ## Goal
 Main goal of this exercise regime is to achieve solid strenght and muscle hypertrophy
 with as little as possible energy drained.
-
