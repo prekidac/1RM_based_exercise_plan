@@ -11,7 +11,3 @@ This program uses 3 and 10 RM weights.
 3RM = 94% 1RM  
 4RM = 92% 1RM  
 ...
-
-## Goal
-Main goal of this exercise regime is to achieve solid strenght and muscle hypertrophy
-with as little as possible energy drained.
