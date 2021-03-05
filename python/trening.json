@@ -45,23 +45,28 @@
     "exercises": {
         "bench": {
             "1RM": 75,
-            "max": null
+            "max": null,
+            "record": 0
         },
         "chin-up": {
             "1RM": 24,
-            "max": null
+            "max": null,
+            "record": 0
         },
         "press": {
             "1RM": 61,
-            "max": null
+            "max": null,
+            "record": 0
         },
         "squat": {
             "1RM": 85,
-            "max": null
+            "max": null,
+            "record": 0
         },
         "deadlift": {
             "1RM": 113,
-            "max": 120
+            "max": 120,
+            "record": 0
         }
     }
 }
