@@ -80,7 +80,7 @@ class Trening(object):
                 reps = input("\n  Puta podigao: ")
                 if reps.isdigit() and 0 <= int(reps) < 10:
                     break
-                
+
             if self.current_exercise == "chin-up":
                 weight = (self.config["exercises"]["chin-up"]
                           ["1RM"] + self.config["my_weight"])
@@ -95,13 +95,9 @@ class Trening(object):
 
             self.new_1rm = round(self.new_1rm, 2)
             self.maximum = self.config["exercises"][self.current_exercise]["max"]
-            self.record = self.config["exercises"][self.current_exercise]["record"]
 
             if self.maximum and self.new_1rm > self.maximum:
                 self.new_1rm = self.maximum
-
-            if self.new_1rm > self.record:
-                self.record = self.new_1rm
         else:
             input("\n")
 
@@ -110,7 +106,10 @@ class Trening(object):
         self.config["last_exercise"] = self.current_exercise
         self.config["last_cycle"] = self.current_cycle
         self.config["exercises"][self.current_exercise]["1RM"] = self.new_1rm
-        self.config["exercises"][self.current_exercise]["record"] = self.record
+
+        self.record = self.config["exercises"][self.current_exercise]["record"]
+        self.config["exercises"][self.current_exercise]["record"] = max(
+            self.record, self.new_1rm)
 
         with open(self.data_path, "w") as f:
             json.dump(self.config, f, indent=4)
