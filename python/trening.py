@@ -32,7 +32,7 @@ class Trening(object):
                 self.current_cycle = self.config["cycle_order"][index + 1]
             else:
                 self.current_cycle = self.config["cycle_order"][0]
-            
+
             self.current_exercise = self.config["exercise_order"][0]
 
         self.cycle_rms = self.config[self.current_cycle + "_RMs"]
@@ -43,17 +43,15 @@ class Trening(object):
         self.weights = []
         for rm in self.cycle_rms:
             if self.current_exercise == "chin-up":
-                weight = self.config["percents"][rm] * (
-                    self.one_rm + self.config["my_weight"]) - self.config["my_weight"]
+                weight = self.config["percents"][rm] * \
+                    self.one_rm - self.config["my_weight"]
                 if weight < 0:
                     weight = 0
-                weight = weight // self.config["weight_inc"] * \
-                    self.config["weight_inc"]
             else:
                 weight = self.config["percents"][rm] * self.one_rm
-                
-                weight = weight // self.config["weight_inc"] * \
-                    self.config["weight_inc"]
+
+            weight = weight // self.config["weight_inc"] * \
+                self.config["weight_inc"]
             self.weights.append(weight)
 
     def print_exercise(self) -> None:
@@ -84,21 +82,11 @@ class Trening(object):
                 if reps.isdigit() and 0 <= int(reps) < 10:
                     break
 
-            if self.current_exercise == "chin-up":
-                weight = (self.config["exercises"]["chin-up"]
-                          ["1RM"] + self.config["my_weight"])
-                ratio = self.config["percents"][self.cycle_rms[-1]
-                                                ] / self.config["percents"][int(reps)]
-                self.new_1rm = weight * ratio - self.config["my_weight"]
-            else:
-                weight = self.config["exercises"][self.current_exercise]["1RM"]
-                ratio = self.config["percents"][self.cycle_rms[-1]
-                                                ] / self.config["percents"][int(reps)]
-                self.new_1rm = weight * ratio
-
-            self.new_1rm = round(self.new_1rm, 2)
+            weight = self.config["exercises"][self.current_exercise]["1RM"]
+            ratio = self.config["percents"][self.cycle_rms[-1]
+                                            ] / self.config["percents"][int(reps)]
+            self.new_1rm = round(weight * ratio, 2)
             self.maximum = self.config["exercises"][self.current_exercise]["max"]
-
             if self.maximum and self.new_1rm > self.maximum:
                 self.new_1rm = self.maximum
         else:
