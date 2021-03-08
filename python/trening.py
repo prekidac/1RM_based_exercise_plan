@@ -32,7 +32,9 @@ class Trening(object):
                 self.current_cycle = self.config["cycle_order"][index + 1]
             else:
                 self.current_cycle = self.config["cycle_order"][0]
+            
             self.current_exercise = self.config["exercise_order"][0]
+
         self.cycle_rms = self.config[self.current_cycle + "_RMs"]
         self.one_rm = self.config["exercises"][self.current_exercise]["1RM"]
         self.calculate_set_weights()
@@ -49,6 +51,7 @@ class Trening(object):
                     self.config["weight_inc"]
             else:
                 weight = self.config["percents"][rm] * self.one_rm
+                
                 weight = weight // self.config["weight_inc"] * \
                     self.config["weight_inc"]
             self.weights.append(weight)
