@@ -91,6 +91,7 @@ class Trening(object):
                 self.new_1rm = self.maximum
         else:
             input("\n")
+            self.new_1rm = self.one_rm
 
     def update_config(self) -> None:
         self.calculate_new_1rm()
