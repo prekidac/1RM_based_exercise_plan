@@ -78,7 +78,7 @@ class Trening(object):
     def calculate_new_1rm(self) -> None:
         if self.current_cycle == "neural":
             while True:
-                reps = input("\n  Puta podigao: ")
+                reps = input(f"\n  {attr('bold')}Puta podigao: {attr('reset')}")
                 if reps.isdigit() and 0 <= int(reps) < 10:
                     break
 
