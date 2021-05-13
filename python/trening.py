@@ -37,6 +37,8 @@ class Trening(object):
 
         self.cycle_rms = self.config[self.current_cycle + "_RMs"]
         self.one_rm = self.config["exercises"][self.current_exercise]["1RM"]
+        self.maximum = self.config["exercises"][self.current_exercise]["max"]
+        self.record = self.config["exercises"][self.current_exercise]["record"]
         self.calculate_set_weights()
 
     def calculate_set_weights(self) -> None:
@@ -86,9 +88,6 @@ class Trening(object):
             ratio = self.config["percents"][self.cycle_rms[-1]
                                             ] / self.config["percents"][int(reps)]
             self.new_1rm = round(weight * ratio, 2)
-            self.maximum = self.config["exercises"][self.current_exercise]["max"]
-            if self.maximum and self.new_1rm > self.maximum:
-                self.new_1rm = self.maximum
         else:
             input("\n")
             self.new_1rm = self.one_rm
@@ -97,9 +96,9 @@ class Trening(object):
         self.calculate_new_1rm()
         self.config["last_exercise"] = self.current_exercise
         self.config["last_cycle"] = self.current_cycle
-        self.config["exercises"][self.current_exercise]["1RM"] = self.new_1rm
 
-        self.record = self.config["exercises"][self.current_exercise]["record"]
+        self.config["exercises"][self.current_exercise]["1RM"] = min(
+            self.new_1rm, self.maximum)
         self.config["exercises"][self.current_exercise]["record"] = max(
             self.record, self.new_1rm)
 
