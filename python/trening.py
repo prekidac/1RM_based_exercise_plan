@@ -4,6 +4,7 @@
 
 import json
 import os
+import subprocess
 from pathlib import Path
 from colored import fg, attr
 
@@ -104,6 +105,8 @@ class Trening(object):
 
         with open(self.data_path, "w") as f:
             json.dump(self.config, f, indent=4)
+        p = subprocess.Popen(["energy", "trening", "20"])
+        p.wait()
 
 
 if __name__ == "__main__":
