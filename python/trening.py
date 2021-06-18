@@ -105,7 +105,7 @@ class Trening(object):
 
         with open(self.data_path, "w") as f:
             json.dump(self.config, f, indent=4)
-        p = subprocess.Popen(["energy", "trening", "25"])
+        p = subprocess.Popen(["energy", "-e", "trening", "25"])
         p.wait()
 
 
