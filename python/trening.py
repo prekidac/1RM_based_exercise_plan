@@ -2,11 +2,21 @@
 
 # Linux CLI workout assistant
 
+import math
+from columnar import columnar
 import json
 import os
+from posixpath import expanduser
 import subprocess
+import argparse
 from pathlib import Path
 from colored import fg, attr
+import logging
+
+FORMAT = f"%(filename)s: {attr('bold')}%(levelname)s {fg(3)+attr('bold')}%(message)s{attr('reset')} line: %(lineno)s, %(relativeCreated)dms"
+logging.basicConfig(format=FORMAT, level=logging.DEBUG)
+
+logging.disable(logging.WARNING)
 
 data_path = os.path.join(Path.home(), ".local/share/trening.json")
 
@@ -81,7 +91,8 @@ class Trening(object):
     def calculate_new_1rm(self) -> None:
         if self.current_cycle == "neural":
             while True:
-                reps = input(f"\n  {attr('bold')}Puta podigao: {attr('reset')}")
+                reps = input(
+                    f"\n  {attr('bold')}Puta podigao: {attr('reset')}")
                 if reps.isdigit() and 0 <= int(reps) < 10:
                     break
 
@@ -108,8 +119,33 @@ class Trening(object):
         p = subprocess.Popen(["energy", "-e", "trening", "25"])
         p.wait()
 
+    def print_stats(self) -> None:
+        self.exercises = self.config["exercises"]
+        logging.debug(f"All: {self.exercises}")
+        headers = []
+        data = []
+        _ = []
+        for i in self.exercises:
+            logging.debug(f"{i} - {self.exercises[i]}")
+            headers.append(i.capitalize())
+            if self.exercises[i]["1RM"] == self.exercises[i]["max"]:
+                _.append(
+                    f"{attr('bold')+fg(2)}{round(self.exercises[i]['1RM'])}{attr('reset')}")
+            else:
+                _.append(math.floor(self.exercises[i]["1RM"]))
+        data.append(_)
+        table = columnar(data, headers, min_column_width=10, justify="c")
+        print(table)
+
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--stats", action="store_true",
+                        help="display workout statistics")
+    args = parser.parse_args()
     trening = Trening()
-    trening.print_exercise()
-    trening.update_config()
+    if args.stats:
+        trening.print_stats()
+    else:
+        trening.print_exercise()
+        trening.update_config()
