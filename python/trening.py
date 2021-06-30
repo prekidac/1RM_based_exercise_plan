@@ -120,20 +120,25 @@ class Trening(object):
         p.wait()
 
     def print_stats(self) -> None:
-        self.exercises = self.config["exercises"]
-        logging.debug(f"All: {self.exercises}")
+        exercises = self.config["exercises"]
+        weight = self.config["my_weight"]
+        logging.debug(f"Exercises: {exercises}")
+        logging.debug(f"Weight: {weight}")
         headers = []
         data = []
-        _ = []
-        for i in self.exercises:
-            logging.debug(f"{i} - {self.exercises[i]}")
+        rms = []
+        percents = []
+        for i in exercises:
+            logging.debug(f"{i} - {exercises[i]}")
             headers.append(i.capitalize())
-            if self.exercises[i]["1RM"] == self.exercises[i]["max"]:
-                _.append(
-                    f"{attr('bold')+fg(2)}{round(self.exercises[i]['1RM'])}{attr('reset')}")
+            if exercises[i]["1RM"] == exercises[i]["max"]:
+                rms.append(
+                    f"{attr('bold')+fg(2)}{round(exercises[i]['1RM'])}{attr('reset')}")
             else:
-                _.append(math.floor(self.exercises[i]["1RM"]))
-        data.append(_)
+                rms.append(math.floor(exercises[i]["1RM"]))
+            percents.append(round(exercises[i]["1RM"]/weight,2))
+        data.append(rms)
+        data.append(percents)
         table = columnar(data, headers, min_column_width=10, justify="c")
         print(table)
 
