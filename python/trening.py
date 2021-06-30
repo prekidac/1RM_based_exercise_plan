@@ -2,7 +2,6 @@
 
 # Linux CLI workout assistant
 
-import math
 from columnar import columnar
 import json
 import os
@@ -124,10 +123,11 @@ class Trening(object):
         weight = self.config["my_weight"]
         logging.debug(f"Exercises: {exercises}")
         logging.debug(f"Weight: {weight}")
-        headers = []
+        headers = [""]
         data = []
-        rms = []
-        percents = []
+        rms = ["1RM"]
+        records = ["Record"]
+        percents = ["1RM/weight"]
         for i in exercises:
             logging.debug(f"{i} - {exercises[i]}")
             headers.append(i.capitalize())
@@ -135,9 +135,11 @@ class Trening(object):
                 rms.append(
                     f"{attr('bold')+fg(2)}{round(exercises[i]['1RM'])}{attr('reset')}")
             else:
-                rms.append(math.floor(exercises[i]["1RM"]))
+                rms.append(round(exercises[i]["1RM"]))
             percents.append(round(exercises[i]["1RM"]/weight,2))
+            records.append(round(exercises[i]["record"]))
         data.append(rms)
+        data.append(records)
         data.append(percents)
         table = columnar(data, headers, min_column_width=10, justify="c")
         print(table)
