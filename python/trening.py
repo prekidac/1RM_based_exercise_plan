@@ -2,12 +2,14 @@
 
 # Linux CLI workout assistant
 
+import termios
 import questionary
 from questionary import Style
 from color_schema import questionary_style
 from columnar import columnar
 import json
 import os
+import sys
 from posixpath import expanduser
 import subprocess
 import argparse
@@ -102,7 +104,7 @@ class Trening(object):
             exercise = fg(2) + attr(1) + \
                 self.current_exercise.title() + ":" + attr("reset")
             print(f"  {exercise:<10}\t{w}\t")
-        print()
+        print(flush=True)
 
     def calculate_new_1rm(self) -> float:
         def check(x):
@@ -181,6 +183,7 @@ class Trening(object):
             if i == len(self.cycle_rms) - 1 and self.current_cycle == 'neural':
                 new_1rm = self.calculate_new_1rm()
             else:
+                termios.tcflush(sys.stdin,termios.TCIFLUSH)
                 if questionary.text("Done:", qmark=" ", style=style).ask() == None:
                     exit()
         else:
