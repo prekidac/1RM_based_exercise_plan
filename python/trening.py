@@ -84,7 +84,7 @@ class Trening(object):
                 reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
             if i == current:
                 w = fg("2") + str(w) + attr("reset")
-            if i == len(self.weights[:-1]) // 2 + 1:
+            if i == len(self.weights) // 2:
                 print(f"\t\t{w}\tx {reps}")
             else:
                 print(f"\t\t{w}\t")
@@ -101,7 +101,7 @@ class Trening(object):
         else:
             exercise = fg(2) + attr(1) + \
                 self.current_exercise.title() + ":" + attr("reset")
-            print(f"\n  {exercise:<10}\t{w}\tx {reps}")
+            print(f"  {exercise:<10}\t{w}\t")
         print()
 
     def _calculate_new_1rm(self) -> None:
@@ -125,15 +125,17 @@ class Trening(object):
             self.new_1rm = self.one_rm
 
     def _update_config(self) -> None:
-        self._calculate_new_1rm()
         self.config["last_exercise"] = self.current_exercise
         self.config["last_cycle"] = self.current_cycle
 
-        if self.maximum:
-            self.config["exercises"][self.current_exercise]["1RM"] = min(
-                self.new_1rm, self.maximum)
-        self.config["exercises"][self.current_exercise]["record"] = max(
-            self.record, self.new_1rm)
+        try:
+            if self.maximum:
+                self.config["exercises"][self.current_exercise]["1RM"] = min(
+                    self.new_1rm, self.maximum)
+            self.config["exercises"][self.current_exercise]["record"] = max(
+                self.record, self.new_1rm)
+        except:
+            logging.debug(f"1RM and record not changed")
 
         with open(self.data_path, "w") as f:
             json.dump(self.config, f, indent=4)
@@ -181,11 +183,13 @@ class Trening(object):
             if i > 0:
                 self._rest()
                 self.print_exercise(i)
-            if i == len(self.cycle_rms) - 1:
-                self._update_config()
+            if i == len(self.cycle_rms) - 1 and self.current_cycle == 'neural':
+                self._calculate_new_1rm()
             else:
                 if questionary.text("Done:", qmark=" ", style=style).ask() == None:
                     exit()
+        else:
+            self._update_config()
 
 
 if __name__ == "__main__":
