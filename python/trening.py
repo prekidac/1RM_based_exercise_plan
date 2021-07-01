@@ -104,7 +104,7 @@ class Trening(object):
             print(f"  {exercise:<10}\t{w}\t")
         print()
 
-    def _calculate_new_1rm(self) -> None:
+    def calculate_new_1rm(self) -> float:
         def check(x):
             try:
                 if 0 <= int(x) <= 10:
@@ -117,24 +117,21 @@ class Trening(object):
         reps = questionary.text("Reps lifted:", qmark=" ", validate=check, style=style).ask()
         if not reps:
             exit()
-        if self.current_cycle == "neural":
-            ratio = self.config["percents"][self.cycle_rms[-1]
-                                            ] / self.config["percents"][int(reps)]
-            self.new_1rm = round(self.one_rm * ratio, 2)
-        else:
-            self.new_1rm = self.one_rm
+        ratio = self.config["percents"][self.cycle_rms[-1]
+                                        ] / self.config["percents"][int(reps)]
+        return round(self.one_rm * ratio, 2)
 
-    def _update_config(self) -> None:
+    def update_config(self, new_1rm: float = None) -> None:
         self.config["last_exercise"] = self.current_exercise
         self.config["last_cycle"] = self.current_cycle
 
-        try:
+        if new_1rm:
             if self.maximum:
                 self.config["exercises"][self.current_exercise]["1RM"] = min(
-                    self.new_1rm, self.maximum)
+                    new_1rm, self.maximum)
             self.config["exercises"][self.current_exercise]["record"] = max(
-                self.record, self.new_1rm)
-        except:
+                self.record, new_1rm)
+        else:
             logging.debug(f"1RM and record not changed")
 
         with open(self.data_path, "w") as f:
@@ -171,25 +168,23 @@ class Trening(object):
         print(table)
 
     def _rest(self) -> None:
-        try:
-            p = subprocess.Popen(["pauza", "-b", "-t Prepare", f"{self.rest_min}m"])
-            p.wait()
-        except:
-            exit()
+        p = subprocess.Popen(["pauza", "-b", "-t", "Prepare", f"{self.rest_min}m"])
+        p.wait()
 
     def run(self) -> None:
+        new_1rm = None
         for i in range(len(self.cycle_rms)):
             self.print_exercise(i)
             if i > 0:
                 self._rest()
                 self.print_exercise(i)
             if i == len(self.cycle_rms) - 1 and self.current_cycle == 'neural':
-                self._calculate_new_1rm()
+                new_1rm = self.calculate_new_1rm()
             else:
                 if questionary.text("Done:", qmark=" ", style=style).ask() == None:
                     exit()
         else:
-            self._update_config()
+            self.update_config(new_1rm)
 
 
 if __name__ == "__main__":
