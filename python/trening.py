@@ -172,7 +172,7 @@ class Trening(object):
 
     def _rest(self) -> None:
         try:
-            p = subprocess.Popen(["pauza", f"{self.rest_min}m"])
+            p = subprocess.Popen(["pauza", "-b", "-t Prepare", f"{self.rest_min}m"])
             p.wait()
         except:
             exit()
