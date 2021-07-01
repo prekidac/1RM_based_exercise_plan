@@ -2,6 +2,9 @@
 
 # Linux CLI workout assistant
 
+import questionary
+from questionary import Style
+from color_schema import questionary_style
 from columnar import columnar
 import json
 import os
@@ -18,6 +21,7 @@ logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 logging.disable(logging.WARNING)
 
 data_path = os.path.join(Path.home(), ".local/share/trening.json")
+style = Style(questionary_style)
 
 
 class Trening(object):
@@ -29,6 +33,15 @@ class Trening(object):
     def load_conf(self) -> None:
         with open(self.data_path) as f:
             self.config = json.load(f)
+
+        self.determine_exercise()
+        self.cycle_rms = self.config[self.current_cycle + "_RMs"]
+        self.one_rm = self.config["exercises"][self.current_exercise]["1RM"]
+        self.maximum = self.config["exercises"][self.current_exercise]["max"]
+        self.record = self.config["exercises"][self.current_exercise]["record"]
+        self.energy = self.config["energy_per_set"]
+        self.rest_min = self.config["rest_minutes"]
+        self.calculate_set_weights()
 
     def determine_exercise(self) -> None:
         index = self.config["exercise_order"].index(
@@ -45,12 +58,6 @@ class Trening(object):
 
             self.current_exercise = self.config["exercise_order"][0]
 
-        self.cycle_rms = self.config[self.current_cycle + "_RMs"]
-        self.one_rm = self.config["exercises"][self.current_exercise]["1RM"]
-        self.maximum = self.config["exercises"][self.current_exercise]["max"]
-        self.record = self.config["exercises"][self.current_exercise]["record"]
-        self.calculate_set_weights()
-
     def calculate_set_weights(self) -> None:
         self.weights = []
         for rm in self.cycle_rms:
@@ -66,56 +73,73 @@ class Trening(object):
                 self.config["weight_inc"]
             self.weights.append(weight)
 
-    def print_exercise(self) -> None:
-        self.determine_exercise()
+    def print_exercise(self, current: int) -> None:
         os.system("clear")
 
-        for w in self.weights[0:-1]:
+        i = 0
+        for w in self.weights[:-1]:
             if self.current_cycle == 'neural':
-                print(f"\t\t{w:>5}\tx {self.cycle_rms[-1]}")
+                reps = self.cycle_rms[-1]
             else:
                 reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-                print(f"\t\t{w:>5}\tx {reps}")
+            if i == current:
+                w = fg("2") + str(w) + attr("reset")
+            if i == len(self.weights[:-1]) // 2 + 1:
+                print(f"\t\t{w}\tx {reps}")
+            else:
+                print(f"\t\t{w}\t")
+            i += 1
+
+        w = self.weights[-1]
+        if i == current:
+            w = fg(2) + str(w) + attr("reset")
 
         if self.current_cycle == 'neural':
             exercise = fg(1) + attr(1) + \
                 self.current_exercise.title() + ":" + attr("reset")
-            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx max")
+            print(f"\n  {exercise:<10}\t{w}\tx max")
         else:
             exercise = fg(2) + attr(1) + \
                 self.current_exercise.title() + ":" + attr("reset")
-            reps = self.cycle_rms[-1] - self.config["metabolic_rep_dec"]
-            print(f"\n  {exercise:<10}\t{self.weights[-1]:>5}\tx {reps}")
+            print(f"\n  {exercise:<10}\t{w}\tx {reps}")
+        print()
 
-    def calculate_new_1rm(self) -> None:
+    def _calculate_new_1rm(self) -> None:
+        def check(x):
+            try:
+                if 0 <= int(x) <= 10:
+                    return True
+                else:
+                    return "0-10"
+            except:
+                return "0-10"
+
+        reps = questionary.text("Reps lifted:", qmark=" ", validate=check, style=style).ask()
+        if not reps:
+            exit()
         if self.current_cycle == "neural":
-            while True:
-                reps = input(
-                    f"\n  {attr('bold')}Puta podigao: {attr('reset')}")
-                if reps.isdigit() and 0 <= int(reps) < 10:
-                    break
-
-            weight = self.config["exercises"][self.current_exercise]["1RM"]
             ratio = self.config["percents"][self.cycle_rms[-1]
                                             ] / self.config["percents"][int(reps)]
-            self.new_1rm = round(weight * ratio, 2)
+            self.new_1rm = round(self.one_rm * ratio, 2)
         else:
-            input("\n")
             self.new_1rm = self.one_rm
 
-    def update_config(self) -> None:
-        self.calculate_new_1rm()
+    def _update_config(self) -> None:
+        self._calculate_new_1rm()
         self.config["last_exercise"] = self.current_exercise
         self.config["last_cycle"] = self.current_cycle
 
-        self.config["exercises"][self.current_exercise]["1RM"] = min(
-            self.new_1rm, self.maximum)
+        if self.maximum:
+            self.config["exercises"][self.current_exercise]["1RM"] = min(
+                self.new_1rm, self.maximum)
         self.config["exercises"][self.current_exercise]["record"] = max(
             self.record, self.new_1rm)
 
         with open(self.data_path, "w") as f:
             json.dump(self.config, f, indent=4)
-        p = subprocess.Popen(["energy", "-e", "trening", "25"])
+        energy = self.energy * len(self.cycle_rms)
+        logging.debug(f"Energy: {energy}")
+        p = subprocess.Popen(["energy", "-e", "trening", f"{energy}"])
         p.wait()
 
     def print_stats(self) -> None:
@@ -136,13 +160,32 @@ class Trening(object):
                     f"{attr('bold')+fg(2)}{round(exercises[i]['1RM'])}{attr('reset')}")
             else:
                 rms.append(round(exercises[i]["1RM"]))
-            percents.append(round(exercises[i]["1RM"]/weight,2))
+            percents.append(round(exercises[i]["1RM"]/weight, 2))
             records.append(round(exercises[i]["record"]))
         data.append(rms)
         data.append(records)
         data.append(percents)
         table = columnar(data, headers, min_column_width=10, justify="c")
         print(table)
+
+    def _rest(self) -> None:
+        try:
+            p = subprocess.Popen(["pauza", f"{self.rest_min}m"])
+            p.wait()
+        except:
+            exit()
+
+    def run(self) -> None:
+        for i in range(len(self.cycle_rms)):
+            self.print_exercise(i)
+            if i > 0:
+                self._rest()
+                self.print_exercise(i)
+            if i == len(self.cycle_rms) - 1:
+                self._update_config()
+            else:
+                if questionary.text("Done:", qmark=" ", style=style).ask() == None:
+                    exit()
 
 
 if __name__ == "__main__":
@@ -154,5 +197,4 @@ if __name__ == "__main__":
     if args.stats:
         trening.print_stats()
     else:
-        trening.print_exercise()
-        trening.update_config()
+        trening.run()

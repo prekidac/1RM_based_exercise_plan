@@ -1,8 +1,10 @@
 {
-    "my_weight": 77,
+    "my_weight": 76,
     "weight_inc": 2.5,
+    "energy_per_set": 5,
+    "rest_minutes": 4,
     "last_exercise": "deadlift",
-    "last_cycle": "metabolic",
+    "last_cycle": "neural",
     "percents": [
         1.05,
         1.0,
@@ -33,12 +35,17 @@
     ],
     "neural_RMs": [
         12,
+        12,
         9,
         6,
+        3,
         3
     ],
     "metabolic_RMs": [
         13,
+        13,
+        10,
+        10,
         10
     ],
     "metabolic_rep_dec": 3,
