@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /usr/bin/env python3
 
 # Linux CLI workout assistant
 
@@ -118,7 +118,7 @@ class Trening(object):
 
         reps = questionary.text("Reps lifted:", qmark=" ", validate=check, style=style).ask()
         if not reps:
-            exit()
+            exit(1)
         ratio = self.config["percents"][self.cycle_rms[-1]
                                         ] / self.config["percents"][int(reps)]
         return round(self.one_rm * ratio, 2)
@@ -185,7 +185,7 @@ class Trening(object):
             else:
                 termios.tcflush(sys.stdin,termios.TCIFLUSH)
                 if questionary.text("Done:", qmark=" ", style=style).ask() == None:
-                    exit()
+                    exit(1)
         else:
             self.update_config(new_1rm)
 
