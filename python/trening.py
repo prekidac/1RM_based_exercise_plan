@@ -139,6 +139,8 @@ class Trening(object):
         with open(self.data_path, "w") as f:
             json.dump(self.config, f, indent=4)
         energy = self.energy * len(self.cycle_rms)
+        if self.one_rm == self.maximum:
+            energy = energy // 2
         logging.debug(f"Energy: {energy}")
         p = subprocess.Popen(["energy", "-e", "trening", f"{energy}"])
         p.wait()
