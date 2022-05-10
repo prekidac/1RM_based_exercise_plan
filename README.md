@@ -1,6 +1,5 @@
 # 1RM-based-exercise-plan
-Small Linux CLI program written in bash and Python, 
-which calculates weight for every set based on 1RM.
+Small Linux CLI program which calculates weight for every set based on 1RM.
 ## Exercises
 Bench, Squat, Deadlift, Shoulder press and Chin-up.
 ## Methodology
