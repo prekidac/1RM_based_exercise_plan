@@ -52,27 +52,22 @@
     "exercises": {
         "bench": {
             "1RM": 77.53,
-            "max": 80,
             "record": 80.94
         },
         "chin-up": {
             "1RM": 105.0,
-            "max": 105,
             "record": 107.47
         },
         "press": {
             "1RM": 65,
-            "max": 65,
             "record": 65
         },
         "squat": {
             "1RM": 90.0,
-            "max": 90,
             "record": 91.96
         },
         "deadlift": {
             "1RM": 119.14,
-            "max": 120,
             "record": 125.15
         }
     }

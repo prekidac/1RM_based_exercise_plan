@@ -39,7 +39,6 @@ class Trening(object):
         self.determine_exercise()
         self.cycle_rms = self.config[self.current_cycle + "_RMs"]
         self.one_rm = self.config["exercises"][self.current_exercise]["1RM"]
-        self.maximum = self.config["exercises"][self.current_exercise]["max"]
         self.record = self.config["exercises"][self.current_exercise]["record"]
         self.energy = self.config["energy_per_set"]
         self.rest_min = self.config["rest_minutes"]
@@ -128,9 +127,7 @@ class Trening(object):
         self.config["last_cycle"] = self.current_cycle
 
         if new_1rm:
-            if self.maximum:
-                self.config["exercises"][self.current_exercise]["1RM"] = min(
-                    new_1rm, self.maximum)
+            self.config["exercises"][self.current_exercise]["1RM"] = new_1rm
             self.config["exercises"][self.current_exercise]["record"] = max(
                 self.record, new_1rm)
         else:
@@ -156,11 +153,7 @@ class Trening(object):
         for i in exercises:
             logging.debug(f"{i} - {exercises[i]}")
             headers.append(i.capitalize())
-            if exercises[i]["1RM"] == exercises[i]["max"]:
-                rms.append(
-                    f"{attr('bold')+fg(2)}{round(exercises[i]['1RM'])}{attr('reset')}")
-            else:
-                rms.append(round(exercises[i]["1RM"]))
+            rms.append(round(exercises[i]["1RM"]))
             percents.append(round(exercises[i]["1RM"]/weight, 2))
             records.append(round(exercises[i]["record"]))
         data.append(rms)
