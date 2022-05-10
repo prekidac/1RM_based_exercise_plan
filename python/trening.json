@@ -1,9 +1,9 @@
 {
     "my_weight": 76,
     "weight_inc": 2.5,
-    "energy_per_set": 5,
+    "energy_per_set": 3,
     "rest_minutes": 4,
-    "last_exercise": "deadlift",
+    "last_exercise": "chin-up",
     "last_cycle": "neural",
     "percents": [
         1.05,
@@ -42,38 +42,38 @@
         3
     ],
     "metabolic_RMs": [
-        13,
-        13,
-        10,
-        10,
-        10
+        12,
+        12,
+        9,
+        9,
+        9
     ],
-    "metabolic_rep_dec": 3,
+    "metabolic_rep_dec": 2,
     "exercises": {
         "bench": {
-            "1RM": 75,
-            "max": null,
-            "record": 0
+            "1RM": 77.53,
+            "max": 80,
+            "record": 80.94
         },
         "chin-up": {
-            "1RM": 24,
-            "max": null,
-            "record": 0
+            "1RM": 105.0,
+            "max": 105,
+            "record": 107.47
         },
         "press": {
-            "1RM": 61,
-            "max": null,
-            "record": 0
+            "1RM": 65,
+            "max": 65,
+            "record": 65
         },
         "squat": {
-            "1RM": 85,
-            "max": null,
-            "record": 0
+            "1RM": 90.0,
+            "max": 90,
+            "record": 91.96
         },
         "deadlift": {
-            "1RM": 113,
+            "1RM": 119.14,
             "max": 120,
-            "record": 0
+            "record": 125.15
         }
     }
 }
